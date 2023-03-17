@@ -10,10 +10,11 @@ import java.util.function.Consumer
 
 
 @SpringBootTest
-class KotlinPlayGroundApplicationTests(
-        @Autowired
-        var userMapper: UserMapper
-){
+class KotlinPlayGroundApplicationTests{
+
+    @Autowired
+    lateinit var userMapper: UserMapper
+
     @Test
     fun contextLoads() {
         println("----- selectAll method test ------")

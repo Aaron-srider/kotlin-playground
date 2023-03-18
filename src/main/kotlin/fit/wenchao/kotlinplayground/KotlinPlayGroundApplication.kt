@@ -5,20 +5,47 @@ package fit.wenchao.kotlinplayground
 import fit.wenchao.kotlinplayground.dao.mapper.UserMapper
 import fit.wenchao.kotlinplayground.dao.po.UserPO
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor
+import org.springframework.beans.factory.config.BeanPostProcessor
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.ApplicationContext
+import org.springframework.stereotype.Component
 import java.util.function.Consumer
 
 
 @SpringBootApplication
 class KotlinPlayGroundApplication(
     @Autowired
-    var userMapper: UserMapper
+    var userMapper: fit.wenchao.kotlinplayground.dao.mapper.UserMapper
 )
 
-fun main(args: Array<String>) {
+@Component
+class TestSpringBeanFactoryPostProcessorBean {
 
-    val kFunction0 = ::print
+    var testInjection: TestInjection? = null
+
+}
+
+open class TestInjection
+
+@Component
+class TestInjectionA : TestInjection()
+
+@Component
+class TestInjectionB : TestInjection()
+
+@Component
+class FieldAutoInjectBeanFactoryPostProcessor : BeanFactoryPostProcessor {
+    override fun postProcessBeanFactory(beanFactory: ConfigurableListableBeanFactory) {
+        var testInjection = TestInjectionA()
+        println(testInjection)
+        beanFactory.registerResolvableDependency(TestInjection::class.java, testInjection);
+    }
+}
+
+fun main(args: Array<String>) {
 
 //    print()
 //    var user = UserPO()
@@ -35,13 +62,13 @@ fun main(args: Array<String>) {
 //    val declaredField = javaClass.getDeclaredField("id")
 //    println(declaredField)
 //    println(field)
-    runApplication<KotlinPlayGroundApplication>(*args)
-}
+    val appCtx = runApplication<KotlinPlayGroundApplication>(*args)
 
-fun print() {
-    println("hello")
-}
 
-fun  print2() {
+    val testSpringBeanFactoryPostProcessorBean = appCtx.getBean(
+        "testSpringBeanFactoryPostProcessorBean",
+        TestSpringBeanFactoryPostProcessorBean::class.java
+    )
+    println(testSpringBeanFactoryPostProcessorBean.testInjection)
 
 }

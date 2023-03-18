@@ -13,14 +13,14 @@ import java.util.function.Consumer
 class KotlinPlayGroundApplicationTests{
 
     @Autowired
-    lateinit var userMapper: UserMapper
+    lateinit var userMapper: fit.wenchao.kotlinplayground.dao.mapper.UserMapper
 
     @Test
     fun contextLoads() {
         println("----- selectAll method test ------")
-        val userList: List<UserPO> = userMapper.selectList(null)
+        val userList: List<fit.wenchao.kotlinplayground.dao.po.UserPO> = userMapper.selectList(null)
         println(userList.size)
-        userList.forEach(Consumer { x: UserPO? -> println(x) })
+        userList.forEach(Consumer { x: fit.wenchao.kotlinplayground.dao.po.UserPO? -> println(x) })
     }
 }
 

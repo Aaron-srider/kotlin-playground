@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
+fit.wenchao.kotlinplayground.envPostProcessor.DemoEnvironment
